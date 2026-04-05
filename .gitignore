@@ -1,0 +1,5 @@
+.DS_Store
+node_modules/
+subscriptions.json
+send-push.js
+package-lock.json

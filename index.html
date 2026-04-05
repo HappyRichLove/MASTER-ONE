@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTER ONE Notifications</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6c5ce7">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #a29bfe, #6c5ce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: #888; margin-bottom: 2rem; }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 440px;
+            margin-bottom: 1rem;
+        }
+        .card-title {
+            font-size: 0.85rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #e74c3c;
+            flex-shrink: 0;
+        }
+        .dot.active { background: #2ecc71; }
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        button:active { transform: scale(0.97); }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-subscribe {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+        }
+        .btn-test {
+            background: rgba(108, 92, 231, 0.2);
+            color: #a29bfe;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
+        .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .btn-row button { flex: 1; padding: 0.7rem; font-size: 0.9rem; }
+        input, textarea {
+            width: 100%;
+            padding: 0.7rem 0.9rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.3);
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            margin-bottom: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { border-color: #6c5ce7; }
+        textarea { resize: vertical; min-height: 60px; }
+        label {
+            display: block;
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.25rem;
+        }
+        .sub-json {
+            padding: 0.7rem;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            word-break: break-all;
+            max-height: 100px;
+            overflow-y: auto;
+            color: #6c5ce7;
+            cursor: pointer;
+            user-select: all;
+        }
+        .sub-json:hover { background: rgba(108,92,231,0.15); }
+        .copied {
+            text-align: center;
+            color: #2ecc71;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .copied.show { opacity: 1; }
+        .log {
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .log-entry { padding: 0.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .log-entry:last-child { border: none; }
+        .log-time { color: #6c5ce7; }
+    </style>
+</head>
+<body>
+    <h1>MASTER ONE</h1>
+    <p class="subtitle">Push-уведомления о новых постах</p>
+
+    <!-- Подписка -->
+    <div class="card">
+        <div class="status">
+            <div class="dot" id="statusDot"></div>
+            <span id="statusText">Не подписан</span>
+        </div>
+        <button class="btn-subscribe" id="btnSubscribe" onclick="subscribe()">
+            Подписаться на уведомления
+        </button>
+    </div>
+
+    <!-- Subscription JSON (для отправки с сервера) -->
+    <div class="card" id="subCard" style="display:none;">
+        <div class="card-title">Твоя подписка (нажми чтобы скопировать)</div>
+        <div class="sub-json" id="subJson" onclick="copySubscription()"></div>
+        <div class="copied" id="copiedMsg">Скопировано!</div>
+    </div>
+
+    <!-- Редактор сообщения -->
+    <div class="card" id="editorCard">
+        <div class="card-title">Настройки уведомления</div>
+        <label>Заголовок</label>
+        <input type="text" id="msgTitle" value="MASTER ONE — Новый пост!" placeholder="Заголовок">
+        <label>Текст сообщения</label>
+        <textarea id="msgBody" placeholder="Текст уведомления">Вышел новый ролик на канале! Смотри скорее.</textarea>
+        <label>Ссылка при клике (необязательно)</label>
+        <input type="url" id="msgUrl" placeholder="https://youtube.com/...">
+
+        <div class="btn-row">
+            <button class="btn-test" id="btnTest5" onclick="sendDelayed(5)" disabled>5 сек</button>
+            <button class="btn-test" id="btnTest10" onclick="sendDelayed(10)" disabled>10 сек</button>
+            <button class="btn-test" id="btnTestNow" onclick="sendDelayed(0)" disabled>Сейчас</button>
+        </div>
+    </div>
+
+    <!-- Обратный отсчёт -->
+    <div class="card" id="countdown-card" style="display:none; text-align:center;">
+        <div style="font-size: 2.5rem; font-weight: 700; color: #a29bfe;" id="countdownNum">10</div>
+        <div style="color: #888; font-size: 0.85rem;">Сверни приложение / заблокируй экран!</div>
+    </div>
+
+    <!-- Лог -->
+    <div class="card">
+        <div class="card-title">Лог</div>
+        <div class="log" id="log"></div>
+    </div>
+
+    <script>
+        const VAPID_PUBLIC_KEY = 'BIc4P3VP6bOTOkWqgiMI6YsjkuXemhvTCiVN5nIAU8Gc-s-u-lJ7yNkAKnSGkFDUi0p_z2d1pY29qogiijCjvXw';
+
+        const logEl = document.getElementById('log');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const btnSubscribe = document.getElementById('btnSubscribe');
+        const subCard = document.getElementById('subCard');
+        const subJson = document.getElementById('subJson');
+
+        let currentSubscription = null;
+
+        function addLog(msg) {
+            const time = new Date().toLocaleTimeString('ru-RU');
+            logEl.innerHTML = `<div class="log-entry"><span class="log-time">[${time}]</span> ${msg}</div>` + logEl.innerHTML;
+        }
+
+        function updateStatus(subscribed) {
+            statusDot.classList.toggle('active', subscribed);
+            statusText.textContent = subscribed ? 'Подписан на Push' : 'Не подписан';
+            btnSubscribe.textContent = subscribed ? 'Отписаться' : 'Подписаться на уведомления';
+            document.getElementById('btnTest5').disabled = !subscribed;
+            document.getElementById('btnTest10').disabled = !subscribed;
+            document.getElementById('btnTestNow').disabled = !subscribed;
+        }
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const raw = atob(base64);
+            const arr = new Uint8Array(raw.length);
+            for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+            return arr;
+        }
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(async reg => {
+                    addLog('Service Worker OK');
+                    // Check existing subscription
+                    const sub = await reg.pushManager.getSubscription();
+                    if (sub) {
+                        currentSubscription = sub;
+                        showSubscription(sub);
+                        updateStatus(true);
+                        addLog('Уже подписан на Push');
+                    }
+                })
+                .catch(err => addLog('SW ошибка: ' + err.message));
+        } else {
+            addLog('Service Worker не поддерживается');
+        }
+
+        async function subscribe() {
+            const reg = await navigator.serviceWorker.ready;
+            const existing = await reg.pushManager.getSubscription();
+
+            if (existing) {
+                await existing.unsubscribe();
+                currentSubscription = null;
+                subCard.style.display = 'none';
+                updateStatus(false);
+                addLog('Отписался от Push');
+                return;
+            }
+
+            addLog('Запрашиваю разрешение...');
+            const permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                addLog('Разрешение отклонено');
+                return;
+            }
+
+            try {
+                const sub = await reg.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+                });
+                currentSubscription = sub;
+                showSubscription(sub);
+                updateStatus(true);
+                addLog('Подписка на Push создана!');
+            } catch (err) {
+                addLog('Ошибка подписки: ' + err.message);
+            }
+        }
+
+        function showSubscription(sub) {
+            subCard.style.display = 'block';
+            subJson.textContent = JSON.stringify(sub.toJSON());
+        }
+
+        function copySubscription() {
+            navigator.clipboard.writeText(subJson.textContent).then(() => {
+                const msg = document.getElementById('copiedMsg');
+                msg.classList.add('show');
+                setTimeout(() => msg.classList.remove('show'), 1500);
+            });
+        }
+
+        // --- Local test notifications (with delay) ---
+        let countdownTimer = null;
+
+        function sendDelayed(seconds) {
+            if (Notification.permission !== 'granted') {
+                addLog('Нет разрешения');
+                return;
+            }
+            if (seconds === 0) { fireNotification(); return; }
+
+            addLog(`Уведомление через ${seconds} сек — сворачивай!`);
+            const card = document.getElementById('countdown-card');
+            const num = document.getElementById('countdownNum');
+            card.style.display = 'block';
+            let remaining = seconds;
+            num.textContent = remaining;
+
+            if (countdownTimer) clearInterval(countdownTimer);
+            countdownTimer = setInterval(() => {
+                remaining--;
+                num.textContent = remaining;
+                if (remaining <= 0) {
+                    clearInterval(countdownTimer);
+                    countdownTimer = null;
+                    card.style.display = 'none';
+                    fireNotification();
+                }
+            }, 1000);
+        }
+
+        function fireNotification() {
+            const title = document.getElementById('msgTitle').value || 'MASTER ONE';
+            const body = document.getElementById('msgBody').value || 'Новый контент!';
+            const url = document.getElementById('msgUrl').value;
+
+            navigator.serviceWorker.ready.then(reg => {
+                reg.showNotification(title, {
+                    body: body,
+                    icon: 'icon-192.png',
+                    badge: 'icon-192.png',
+                    vibrate: [200, 100, 200],
+                    tag: 'post-' + Date.now(),
+                    data: { url: url },
+                    actions: [
+                        { action: 'open', title: 'Открыть' },
+                        { action: 'close', title: 'Позже' }
+                    ]
+                });
+                addLog('Уведомление отправлено!');
+            });
+        }
+    </script>
+</body>
+</html>
