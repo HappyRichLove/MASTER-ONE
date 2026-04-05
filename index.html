@@ -2,130 +2,227 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>MASTER ONE</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f0ece4">
+    <meta name="theme-color" content="#efe9df">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap');
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
-            background: #f0ece4;
-            color: #5a5245;
+            font-family: 'Cormorant Garamond', Georgia, serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem 3rem;
+            background: #efe9df;
+            color: #6b6155;
+            overflow-x: hidden;
+        }
+
+        /* Фоновые декоративные круги */
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before {
+            width: 300px; height: 300px;
+            top: -80px; right: -60px;
+            background: radial-gradient(circle, rgba(196,163,90,0.12) 0%, transparent 70%);
+        }
+        body::after {
+            width: 400px; height: 400px;
+            bottom: -100px; left: -80px;
+            background: radial-gradient(circle, rgba(168,198,134,0.1) 0%, transparent 70%);
+        }
+
+        /* Заголовок */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        .logo {
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 4px 20px rgba(175,145,78,0.15);
         }
         h1 {
-            font-size: 1.6rem;
-            font-weight: 400;
-            letter-spacing: 0.15em;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
             color: #af914e;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }
         .subtitle {
-            color: #b5a998;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            margin-bottom: 2rem;
+            color: #c4b8a8;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            font-weight: 300;
         }
-        .card {
-            background: rgba(255,255,255,0.5);
-            border: 1px solid rgba(175,145,78,0.15);
-            border-radius: 16px;
-            padding: 1.5rem;
+
+        /* Liquid Glass карточки */
+        .glass {
+            position: relative;
+            z-index: 1;
             width: 100%;
-            max-width: 440px;
-            margin-bottom: 1rem;
+            max-width: 420px;
+            margin-bottom: 0.8rem;
+            padding: 1.4rem;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.35);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow:
+                0 2px 16px rgba(175,145,78,0.06),
+                inset 0 1px 0 rgba(255,255,255,0.6),
+                inset 0 -1px 0 rgba(175,145,78,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+        .glass:hover {
+            transform: translateY(-1px);
+            box-shadow:
+                0 4px 24px rgba(175,145,78,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.7),
+                inset 0 -1px 0 rgba(175,145,78,0.05);
+        }
+
         .card-title {
-            font-size: 0.75rem;
-            color: #b5a998;
+            font-size: 0.7rem;
+            color: #c4b8a8;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 0.75rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.8rem;
+            font-family: -apple-system, sans-serif;
+            font-weight: 500;
         }
+
+        /* Статус */
         .status {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
         .dot {
             width: 8px; height: 8px;
             border-radius: 50%;
-            background: #ccc;
+            background: #d4c8b8;
             flex-shrink: 0;
+            transition: background 0.3s;
+            box-shadow: 0 0 0 3px rgba(212,200,184,0.3);
         }
-        .dot.active { background: #a8c686; }
+        .dot.active {
+            background: #a8c686;
+            box-shadow: 0 0 0 3px rgba(168,198,134,0.3);
+        }
+
+        /* Кнопки */
         button {
             width: 100%;
             padding: 0.85rem;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 400;
             cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
             font-family: inherit;
+            transition: all 0.15s ease;
+            letter-spacing: 0.03em;
         }
         button:active { transform: scale(0.97); }
-        button:disabled { opacity: 0.35; cursor: not-allowed; }
-        .btn-subscribe {
+        button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .btn-primary {
             background: linear-gradient(135deg, #c4a35a, #af914e);
             color: #fff;
+            box-shadow: 0 4px 16px rgba(175,145,78,0.25);
         }
-        .btn-test {
-            background: rgba(175,145,78,0.1);
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 6px 24px rgba(175,145,78,0.35);
+        }
+
+        .btn-soft {
+            background: rgba(175,145,78,0.08);
             color: #af914e;
-            border: 1px solid rgba(175,145,78,0.25);
+            border: 1px solid rgba(175,145,78,0.15);
+            backdrop-filter: blur(10px);
         }
+        .btn-soft:hover:not(:disabled) {
+            background: rgba(175,145,78,0.14);
+        }
+
         .btn-row {
             display: flex;
             gap: 0.5rem;
-            margin-top: 0.5rem;
+            margin-top: 0.6rem;
         }
-        .btn-row button { flex: 1; padding: 0.7rem; font-size: 0.9rem; }
+        .btn-row button {
+            flex: 1;
+            padding: 0.65rem;
+            font-size: 0.85rem;
+        }
+
+        /* Поля ввода */
         input, textarea {
             width: 100%;
-            padding: 0.7rem 0.9rem;
-            border: 1px solid rgba(175,145,78,0.2);
-            border-radius: 10px;
-            background: rgba(255,255,255,0.6);
+            padding: 0.65rem 0.85rem;
+            border: 1px solid rgba(175,145,78,0.12);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
             color: #5a5245;
             font-size: 0.95rem;
             font-family: inherit;
             margin-bottom: 0.5rem;
             outline: none;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            backdrop-filter: blur(8px);
         }
-        input:focus, textarea:focus { border-color: #af914e; }
-        textarea { resize: vertical; min-height: 60px; }
+        input:focus, textarea:focus {
+            border-color: rgba(175,145,78,0.35);
+            background: rgba(255,255,255,0.7);
+            box-shadow: 0 0 0 3px rgba(175,145,78,0.08);
+        }
+        input::placeholder, textarea::placeholder { color: #c4b8a8; }
+        textarea { resize: vertical; min-height: 55px; }
+
         label {
             display: block;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #b5a998;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.03em;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.05em;
+            font-family: -apple-system, sans-serif;
+            font-weight: 500;
         }
+
+        /* Subscription JSON */
         .sub-json {
-            padding: 0.7rem;
-            background: rgba(175,145,78,0.06);
+            padding: 0.6rem;
+            background: rgba(175,145,78,0.05);
             border-radius: 10px;
-            font-family: monospace;
-            font-size: 0.65rem;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.6rem;
             word-break: break-all;
-            max-height: 80px;
+            max-height: 70px;
             overflow-y: auto;
             color: #af914e;
             cursor: pointer;
             user-select: all;
+            transition: background 0.2s;
         }
-        .sub-json:hover { background: rgba(175,145,78,0.12); }
+        .sub-json:hover { background: rgba(175,145,78,0.1); }
         .copied {
             text-align: center;
             color: #a8c686;
@@ -135,66 +232,112 @@
             transition: opacity 0.3s;
         }
         .copied.show { opacity: 1; }
+
+        /* Обратный отсчёт */
+        .countdown-num {
+            font-size: 3rem;
+            font-weight: 300;
+            color: #af914e;
+            line-height: 1;
+        }
+        .countdown-hint {
+            color: #c4b8a8;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Лог */
         .log {
-            padding: 0.8rem;
-            background: rgba(175,145,78,0.04);
+            padding: 0.6rem;
+            background: rgba(175,145,78,0.03);
             border-radius: 10px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            max-height: 160px;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.7rem;
+            max-height: 140px;
             overflow-y: auto;
         }
         .log-entry {
-            padding: 0.2rem 0;
-            border-bottom: 1px solid rgba(175,145,78,0.08);
+            padding: 0.15rem 0;
+            border-bottom: 1px solid rgba(175,145,78,0.06);
         }
         .log-entry:last-child { border: none; }
         .log-time { color: #c4a35a; }
+
+        /* Декоративный разделитель */
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #c4a35a, transparent);
+            margin: 0.6rem auto;
+        }
+
+        /* Анимация появления */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .glass { animation: fadeUp 0.5s ease both; }
+        .glass:nth-child(2) { animation-delay: 0.05s; }
+        .glass:nth-child(3) { animation-delay: 0.1s; }
+        .glass:nth-child(4) { animation-delay: 0.15s; }
+        .glass:nth-child(5) { animation-delay: 0.2s; }
+        .glass:nth-child(6) { animation-delay: 0.25s; }
     </style>
 </head>
 <body>
-    <h1>MASTER ONE</h1>
-    <p class="subtitle">push-notifications</p>
 
-    <div class="card">
+    <div class="header">
+        <img src="icon-192.png" class="logo" alt="M">
+        <h1>MASTER ONE</h1>
+        <p class="subtitle">уведомления</p>
+    </div>
+
+    <!-- Подписка -->
+    <div class="glass">
         <div class="status">
             <div class="dot" id="statusDot"></div>
-            <span id="statusText">not subscribed</span>
+            <span id="statusText">Не подписан</span>
         </div>
-        <button class="btn-subscribe" id="btnSubscribe" onclick="subscribe()">
+        <button class="btn-primary" id="btnSubscribe" onclick="subscribe()">
             Подписаться
         </button>
     </div>
 
-    <div class="card" id="subCard" style="display:none;">
-        <div class="card-title">Subscription</div>
+    <!-- Subscription JSON -->
+    <div class="glass" id="subCard" style="display:none;">
+        <div class="card-title">Подписка</div>
         <div class="sub-json" id="subJson" onclick="copySubscription()"></div>
-        <div class="copied" id="copiedMsg">Copied</div>
+        <div class="copied" id="copiedMsg">Скопировано</div>
     </div>
 
-    <div class="card" id="editorCard">
-        <div class="card-title">Message</div>
-        <label>Title</label>
-        <input type="text" id="msgTitle" value="MASTER ONE" placeholder="Title">
-        <label>Body</label>
-        <textarea id="msgBody" placeholder="Message text">New content is here</textarea>
-        <label>Link (optional)</label>
+    <!-- Редактор -->
+    <div class="glass" id="editorCard">
+        <div class="card-title">Сообщение</div>
+        <label>Заголовок</label>
+        <input type="text" id="msgTitle" value="MASTER ONE" placeholder="Заголовок">
+        <label>Текст</label>
+        <textarea id="msgBody" placeholder="Текст уведомления">Новый контент уже здесь</textarea>
+        <label>Ссылка (необязательно)</label>
         <input type="url" id="msgUrl" placeholder="https://...">
 
         <div class="btn-row">
-            <button class="btn-test" id="btnTest5" onclick="sendDelayed(5)" disabled>5s</button>
-            <button class="btn-test" id="btnTest10" onclick="sendDelayed(10)" disabled>10s</button>
-            <button class="btn-test" id="btnTestNow" onclick="sendDelayed(0)" disabled>Now</button>
+            <button class="btn-soft" id="btnTest5" onclick="sendDelayed(5)" disabled>5 сек</button>
+            <button class="btn-soft" id="btnTest10" onclick="sendDelayed(10)" disabled>10 сек</button>
+            <button class="btn-soft" id="btnTestNow" onclick="sendDelayed(0)" disabled>Сейчас</button>
         </div>
     </div>
 
-    <div class="card" id="countdown-card" style="display:none; text-align:center;">
-        <div style="font-size: 2.5rem; font-weight: 300; color: #af914e;" id="countdownNum">10</div>
-        <div style="color: #b5a998; font-size: 0.8rem; letter-spacing: 0.05em;">minimize the app</div>
+    <!-- Обратный отсчёт -->
+    <div class="glass" id="countdown-card" style="display:none; text-align:center;">
+        <div class="countdown-num" id="countdownNum">10</div>
+        <div class="countdown-hint">Сверни приложение</div>
     </div>
 
-    <div class="card">
-        <div class="card-title">Log</div>
+    <div class="divider"></div>
+
+    <!-- Лог -->
+    <div class="glass">
+        <div class="card-title">Лог</div>
         <div class="log" id="log"></div>
     </div>
 
@@ -217,8 +360,8 @@
 
         function updateStatus(subscribed) {
             statusDot.classList.toggle('active', subscribed);
-            statusText.textContent = subscribed ? 'subscribed' : 'not subscribed';
-            btnSubscribe.textContent = subscribed ? 'Unsubscribe' : 'Subscribe';
+            statusText.textContent = subscribed ? 'Подписан' : 'Не подписан';
+            btnSubscribe.textContent = subscribed ? 'Отписаться' : 'Подписаться';
             document.getElementById('btnTest5').disabled = !subscribed;
             document.getElementById('btnTest10').disabled = !subscribed;
             document.getElementById('btnTestNow').disabled = !subscribed;
@@ -233,21 +376,26 @@
             return arr;
         }
 
+        // Автообновление SW
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
+            navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' })
                 .then(async reg => {
-                    addLog('Service Worker OK');
+                    addLog('Готов');
+                    reg.update();
                     const sub = await reg.pushManager.getSubscription();
                     if (sub) {
                         currentSubscription = sub;
                         showSubscription(sub);
                         updateStatus(true);
-                        addLog('Push active');
+                        addLog('Push активен');
                     }
                 })
-                .catch(err => addLog('SW error: ' + err.message));
-        } else {
-            addLog('Service Worker not supported');
+                .catch(err => addLog('Ошибка: ' + err.message));
+
+            // Если SW обновился — перезагрузить
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                window.location.reload();
+            });
         }
 
         async function subscribe() {
@@ -259,14 +407,14 @@
                 currentSubscription = null;
                 subCard.style.display = 'none';
                 updateStatus(false);
-                addLog('Unsubscribed');
+                addLog('Отписался');
                 return;
             }
 
-            addLog('Requesting permission...');
+            addLog('Запрос разрешения...');
             const permission = await Notification.requestPermission();
             if (permission !== 'granted') {
-                addLog('Permission denied');
+                addLog('Отказано');
                 return;
             }
 
@@ -278,9 +426,9 @@
                 currentSubscription = sub;
                 showSubscription(sub);
                 updateStatus(true);
-                addLog('Subscribed');
+                addLog('Подписан!');
             } catch (err) {
-                addLog('Error: ' + err.message);
+                addLog('Ошибка: ' + err.message);
             }
         }
 
@@ -300,13 +448,10 @@
         let countdownTimer = null;
 
         function sendDelayed(seconds) {
-            if (Notification.permission !== 'granted') {
-                addLog('No permission');
-                return;
-            }
+            if (Notification.permission !== 'granted') { addLog('Нет разрешения'); return; }
             if (seconds === 0) { fireNotification(); return; }
 
-            addLog(`Notification in ${seconds}s`);
+            addLog(`Уведомление через ${seconds} сек`);
             const card = document.getElementById('countdown-card');
             const num = document.getElementById('countdownNum');
             card.style.display = 'block';
@@ -328,23 +473,21 @@
 
         function fireNotification() {
             const title = document.getElementById('msgTitle').value || 'MASTER ONE';
-            const body = document.getElementById('msgBody').value || 'New content';
+            const body = document.getElementById('msgBody').value || 'Новый контент';
             const url = document.getElementById('msgUrl').value;
 
             navigator.serviceWorker.ready.then(reg => {
                 reg.showNotification(title, {
-                    body: body,
-                    icon: 'icon-192.png',
-                    badge: 'icon-192.png',
+                    body, icon: 'icon-192.png', badge: 'icon-192.png',
                     vibrate: [200, 100, 200],
                     tag: 'post-' + Date.now(),
-                    data: { url: url },
+                    data: { url },
                     actions: [
-                        { action: 'open', title: 'Open' },
-                        { action: 'close', title: 'Later' }
+                        { action: 'open', title: 'Открыть' },
+                        { action: 'close', title: 'Позже' }
                     ]
                 });
-                addLog('Notification sent');
+                addLog('Отправлено');
             });
         }
     </script>
