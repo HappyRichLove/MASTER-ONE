@@ -4,8 +4,8 @@
     "description": "Push-уведомления о новых постах",
     "start_url": "./",
     "display": "standalone",
-    "background_color": "#0c0c1d",
-    "theme_color": "#6c5ce7",
+    "background_color": "#f0ece4",
+    "theme_color": "#f0ece4",
     "icons": [
         {
             "src": "icon-192.png",
