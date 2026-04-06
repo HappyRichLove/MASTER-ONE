@@ -1,4 +1,4 @@
-const CACHE_NAME = 'master-one-v3';
+const CACHE_NAME = 'master-one-v4';
 
 self.addEventListener('install', event => {
     self.skipWaiting();
@@ -11,7 +11,6 @@ self.addEventListener('activate', event => {
     self.clients.claim();
 });
 
-// Network-first: свежее с сервера, кэш только как fallback
 self.addEventListener('fetch', event => {
     event.respondWith(
         fetch(event.request)
@@ -26,20 +25,45 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('push', event => {
     let data = {};
-    try { data = event.data.json(); } catch (e) { data = { title: 'MASTER ONE', body: event.data ? event.data.text() : 'Новый контент!' }; }
+    try { 
+        data = event.data.json(); 
+    } catch (e) { 
+        data = { title: 'MASTER ONE', body: event.data ? event.data.text() : 'Новое сообщение' }; 
+    }
 
-    event.waitUntil(self.registration.showNotification(data.title || 'MASTER ONE', {
-        body: data.body || 'Новый контент!',
-        icon: 'icon-192.png',
-        badge: 'icon-192.png',
-        vibrate: [200, 100, 200],
-        tag: 'post-' + Date.now(),
-        data: { url: data.url || './' },
-        actions: [
-            { action: 'open', title: 'Открыть' },
-            { action: 'close', title: 'Позже' }
-        ]
-    }));
+    const title = data.title || 'MASTER ONE';
+    const body = data.body || 'Новый контент!';
+    const url = data.url || './';
+
+    // Сохраняем в историю через широковещательное сообщение всем вкладкам
+    const pushData = {
+        title,
+        body,
+        url,
+        time: new Date().toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }),
+        type: 'PUSH_RECEIVED'
+    };
+
+    event.waitUntil(
+        Promise.all([
+            self.registration.showNotification(title, {
+                body,
+                icon: 'icon-192.png',
+                badge: 'icon-192.png',
+                vibrate: [200, 100, 200],
+                tag: 'post-' + Date.now(),
+                data: { url },
+                actions: [
+                    { action: 'open', title: 'Открыть' },
+                    { action: 'close', title: 'Позже' }
+                ]
+            }),
+            // Рассылаем данные всем открытым окнам, чтобы они обновили историю в localStorage
+            self.clients.matchAll({ type: 'window' }).then(clients => {
+                clients.forEach(client => client.postMessage(pushData));
+            })
+        ])
+    );
 });
 
 self.addEventListener('notificationclick', event => {
