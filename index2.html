@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MASTER ONE | Подписка</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#efe9df">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: #efe9df;
+            color: #6b6155;
+            overflow: hidden;
+        }
+
+        /* Летающие лепестки */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(196,163,90,0.2), rgba(175,145,78,0.1));
+            border-radius: 40% 60% 50% 50% / 40% 40% 60% 60%;
+            animation: float linear infinite, sway 3s ease-in-out infinite alternate;
+        }
+        .particle.red {
+            background: linear-gradient(135deg, rgba(212,106,106,0.15), rgba(175,78,78,0.05));
+        }
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+        @keyframes sway {
+            0% { margin-left: -15px; }
+            100% { margin-left: 15px; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 340px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: 0 8px 25px rgba(175,145,78,0.15);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 300;
+            letter-spacing: 0.25em;
+            color: #af914e;
+            margin-bottom: 0.2rem;
+        }
+        .subtitle {
+            color: #c4b8a8;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 2.5rem;
+        }
+
+        .glass-form {
+            padding: 2rem 1.5rem;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 10px 40px rgba(175,145,78,0.08);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(175,145,78,0.15);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.5);
+            color: #5a5245;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            outline: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        input:focus {
+            background: rgba(255,255,255,0.8);
+            border-color: rgba(175,145,78,0.4);
+            box-shadow: 0 0 0 4px rgba(175,145,78,0.05);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #c4a35a, #af914e);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(175,145,78,0.25);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(175,145,78,0.35);
+        }
+        button:active { transform: scale(0.98); }
+
+        .heart {
+            color: #af914e;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            opacity: 0.6;
+            animation: heartBeat 2s infinite;
+        }
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.2); }
+            20% { transform: scale(1.1); }
+            30% { transform: scale(1.3); }
+        }
+
+        .footer-text {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #c4b8a8;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <img src="icon-192.png" class="logo" alt="M">
+        <h1>MASTER ONE</h1>
+        <p class="subtitle">уведомления</p>
+
+        <div class="glass-form">
+            <input type="text" id="userName" placeholder="Ваше имя" autocomplete="off">
+            <button id="btnSub" onclick="handleSubscribe()">Подписаться</button>
+        </div>
+
+        <div class="heart">❤</div>
+        <p class="footer-text">v2.0 minimal</p>
+    </div>
+
+    <script>
+        // Частицы
+        (function() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const p = document.createElement('div');
+                const isRed = Math.random() > 0.8;
+                p.className = 'particle' + (isRed ? ' red' : '');
+                const size = 5 + Math.random() * 7;
+                const dur = 15 + Math.random() * 20;
+                p.style.cssText = `
+                    width: ${size}px; height: ${size * 1.2}px;
+                    left: ${Math.random() * 100}%;
+                    animation-duration: ${dur}s, ${3 + Math.random() * 2}s;
+                    animation-delay: -${Math.random() * dur}s;
+                    opacity: ${0.3 + Math.random() * 0.4};
+                `;
+                container.appendChild(p);
+            }
+        })();
+
+        async function handleSubscribe() {
+            const name = document.getElementById('userName').value;
+            if (!name) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
+            }
+            
+            const btn = document.getElementById('btnSub');
+            btn.textContent = 'Подключение...';
+            btn.disabled = true;
+
+            // Здесь будет логика подписки (аналогично index.html)
+            // Для теста просто выведем лог
+            console.log('Подписка для:', name);
+            
+            // В реальном приложении тут вызывается Notification.requestPermission()
+            // и pushManager.subscribe()
+            
+            setTimeout(() => {
+                btn.textContent = 'Готово ✨';
+                btn.style.background = '#a8c686';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
