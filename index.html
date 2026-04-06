@@ -25,7 +25,6 @@
             position: relative;
         }
 
-        /* Лепестки */
         .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .particle { position: absolute; border-radius: 40% 60% 50% 50% / 40% 40% 60% 60%; animation: float linear infinite, sway 3s ease-in-out infinite alternate; filter: blur(1px); }
         .particle.red { background: linear-gradient(135deg, rgba(212,106,106,0.15), rgba(175,78,78,0.05)); }
@@ -41,7 +40,6 @@
         h1 { font-size: 1.8rem; font-weight: 300; letter-spacing: 0.25em; color: #af914e; margin-bottom: 0.2rem; }
         .subtitle { color: #c4b8a8; font-size: 0.9rem; letter-spacing: 0.1em; margin-bottom: 2rem; }
 
-        /* Стеклянные карточки */
         .glass {
             background: rgba(255,255,255,0.35);
             backdrop-filter: blur(20px) saturate(1.4);
@@ -51,10 +49,8 @@
             border: 1px solid rgba(255,255,255,0.5);
             box-shadow: 0 10px 40px rgba(175,145,78,0.08);
             margin-bottom: 1rem;
-            text-align: left;
+            transition: all 0.3s ease;
         }
-
-        .center { text-align: center; }
 
         button {
             width: 100%; padding: 1rem; border: none; border-radius: 16px;
@@ -66,14 +62,42 @@
         button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(175,145,78,0.4); }
         button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-        /* Инструкция */
-        #install-instructions { display: none; margin-top: 1rem; }
-        .instruction-box { font-size: 0.9rem; line-height: 1.4; color: #7a6e60; }
-        .instruction-box b { color: #af914e; }
-        .instruction-step { margin-bottom: 0.8rem; padding-left: 1rem; border-left: 2px solid rgba(175,145,78,0.2); }
+        .btn-outline {
+            background: rgba(175,145,78,0.08);
+            color: #af914e;
+            border: 1px solid rgba(175,145,78,0.2);
+            font-size: 0.9rem;
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            box-shadow: none;
+        }
+
+        .btn-large {
+            padding: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            margin-top: 1rem;
+        }
+
+        /* Скрытые блоки */
+        .collapsible {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            text-align: left;
+        }
+        .collapsible.open {
+            max-height: 500px;
+            margin-bottom: 1rem;
+        }
+
+        .instruction-box { font-size: 0.95rem; line-height: 1.5; color: #7a6e60; padding: 0.5rem 0; }
+        .instruction-box b { color: #af914e; font-weight: 500; }
+        .step { margin-bottom: 0.8rem; position: relative; padding-left: 1.5rem; }
+        .step::before { content: '•'; position: absolute; left: 0; color: #af914e; font-weight: bold; }
 
         /* История */
-        .history-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: #c4b8a8; margin-bottom: 1rem; }
+        .section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; color: #c4b8a8; margin-bottom: 1rem; text-align: left; }
         .push-item { padding: 0.8rem 0; border-bottom: 1px solid rgba(175,145,78,0.1); }
         .push-item:last-child { border: none; }
         .push-time { font-size: 0.7rem; color: #c4a35a; margin-bottom: 0.2rem; }
@@ -81,15 +105,15 @@
         .push-link { color: #af914e; font-size: 0.8rem; text-decoration: none; display: block; margin-top: 0.4rem; font-style: italic; }
 
         /* Ссылки */
-        .links-grid { display: grid; gap: 0.6rem; margin-top: 1rem; }
+        .links-grid { display: grid; gap: 0.8rem; padding: 0.5rem 0; }
         .link-item { 
-            display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1rem; 
-            background: rgba(255,255,255,0.4); border-radius: 14px;
-            text-decoration: none; color: #6b6155; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 1rem; padding: 1rem; 
+            background: rgba(255,255,255,0.4); border-radius: 16px;
+            text-decoration: none; color: #6b6155; font-size: 1rem;
             border: 1px solid rgba(175,145,78,0.1); transition: all 0.2s;
         }
-        .link-item:hover { background: rgba(255,255,255,0.6); transform: translateX(5px); border-color: rgba(175,145,78,0.3); }
-        .link-icon { font-size: 1.2rem; }
+        .link-item:hover { background: rgba(255,255,255,0.7); transform: translateX(8px); border-color: #af914e; }
+        .link-icon { font-size: 1.3rem; }
 
         .heart { font-size: 1.5rem; color: #af914e; margin-top: 2rem; opacity: 0.6; animation: beat 2s infinite; }
         @keyframes beat { 0%, 100% { transform: scale(1); } 10% { transform: scale(1.2); } 20% { transform: scale(1.1); } 30% { transform: scale(1.3); } }
@@ -107,31 +131,33 @@
         <p class="subtitle">уведомления</p>
 
         <!-- Главная кнопка -->
-        <div class="glass center">
+        <div class="glass">
             <button id="btnSubscribe" onclick="subscribe()">Подписаться</button>
-            <div id="statusText" style="margin-top: 1rem; font-size: 0.85rem; color: #c4b8a8;"></div>
+            <div id="statusText" style="margin-top: 1rem; font-size: 0.85rem; color: #c4b8a8;">✨ Нажми, чтобы быть на связи</div>
         </div>
 
         <!-- Инструкция -->
-        <div class="glass" id="install-instructions">
-            <div class="history-title">Как установить</div>
+        <button class="btn-outline" id="btnHow" onclick="toggleBlock('install-instructions')">Как установить приложение?</button>
+        <div class="glass collapsible" id="install-instructions">
+            <div class="section-title">Инструкция</div>
             <div class="instruction-box">
-                <div class="instruction-step">1. Открой сайт в <b>Google Chrome</b> или <b>Safari</b>.</div>
-                <div class="instruction-step">2. Нажми <b>три точки</b> (Android) или кнопку <b>Поделиться</b> (iOS).</div>
-                <div class="instruction-step">3. Выбери <b>"Установить приложение"</b> или <b>"На экран Домой"</b>.</div>
-                <div class="instruction-step">4. Запусти приложение с экрана телефона и нажми <b>Подписаться</b>.</div>
+                <div class="step">Открой этот сайт в <b>Chrome</b> (Android) или <b>Safari</b> (iOS).</div>
+                <div class="step">Нажми <b>«Поделиться»</b> или <b>«Три точки»</b> в углу.</div>
+                <div class="step">Выбери <b>«На экран Домой»</b> или <b>«Установить»</b>.</div>
+                <div class="step">Запусти иконку с экрана и нажми <b>«Подписаться»</b>. Готово!</div>
             </div>
         </div>
 
         <!-- История пушей -->
         <div class="glass" id="history-box" style="display:none;">
-            <div class="history-title">Последние уведомления</div>
+            <div class="section-title">Последние сообщения</div>
             <div id="push-history"></div>
         </div>
 
         <!-- Ссылки -->
-        <div class="glass">
-            <div class="history-title">Наши ресурсы</div>
+        <button class="btn-large" id="btnLinks" onclick="toggleBlock('links-box')">АКТУАЛЬНЫЕ ССЫЛКИ</button>
+        <div class="glass collapsible" id="links-box">
+            <div class="section-title">Наши ресурсы</div>
             <div class="links-grid">
                 <a href="https://t.me/+pxBLwo8mM8Y2MGY0" class="link-item" target="_blank">
                     <span class="link-icon">📱</span>
@@ -153,16 +179,15 @@
         </div>
 
         <div class="heart">❤</div>
-        <div class="version">v3.0 Master</div>
+        <div class="version">v3.2 Master</div>
     </div>
 
     <script>
         const VAPID_PUBLIC_KEY = 'BIc4P3VP6bOTOkWqgiMI6YsjkuXemhvTCiVN5nIAU8Gc-s-u-lJ7yNkAKnSGkFDUi0p_z2d1pY29qogiijCjvXw';
 
-        // Проверка PWA
-        const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-        if (!isPWA) {
-            document.getElementById('install-instructions').style.display = 'block';
+        function toggleBlock(id) {
+            const el = document.getElementById(id);
+            el.classList.toggle('open');
         }
 
         // Частицы
@@ -179,17 +204,11 @@
             }
         })();
 
-        // История (localStorage пока нет сервера)
         function updateHistory() {
             const history = JSON.parse(localStorage.getItem('push_history') || '[]');
             const container = document.getElementById('push-history');
             const box = document.getElementById('history-box');
-            
-            if (history.length === 0) {
-                box.style.display = 'none';
-                return;
-            }
-            
+            if (history.length === 0) return;
             box.style.display = 'block';
             container.innerHTML = history.slice(0, 8).map(item => `
                 <div class="push-item">
@@ -202,63 +221,43 @@
 
         updateHistory();
 
-        // Подписка
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(reg => {
                 reg.pushManager.getSubscription().then(sub => {
                     if (sub) updateStatus(true);
                 });
             });
-// Слушаем новые уведомления для обновления истории
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.addEventListener('message', (event) => {
-        if (event.data && event.data.type === 'PUSH_RECEIVED') {
-            const history = JSON.parse(localStorage.getItem('push_history') || '[]');
-            const newItem = {
-                title: event.data.title,
-                body: event.data.body,
-                url: event.data.url,
-                time: event.data.time
-            };
-            // Добавляем в начало, храним 8 штук
-            history.unshift(newItem);
-            localStorage.setItem('push_history', JSON.stringify(history.slice(0, 8)));
-            updateHistory();
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                if (event.data && event.data.type === 'PUSH_RECEIVED') {
+                    const history = JSON.parse(localStorage.getItem('push_history') || '[]');
+                    history.unshift({ title: event.data.title, body: event.data.body, url: event.data.url, time: event.data.time });
+                    localStorage.setItem('push_history', JSON.stringify(history.slice(0, 8)));
+                    updateHistory();
+                }
+            });
         }
-    });
-}
-
 
         function updateStatus(subscribed) {
             const btn = document.getElementById('btnSubscribe');
             const status = document.getElementById('statusText');
             btn.textContent = subscribed ? 'Вы подписаны' : 'Подписаться';
             btn.disabled = subscribed;
-            status.textContent = subscribed ? 'Уведомления активны ✨' : 'Нажми, чтобы не пропустить важное';
+            status.textContent = subscribed ? 'Уведомления активны ✨' : 'Жми, чтобы не пропустить важное';
         }
 
         async function subscribe() {
             const permission = await Notification.requestPermission();
-            if (permission !== 'granted') {
-                alert('Нужно разрешение на уведомления');
-                return;
-            }
-
+            if (permission !== 'granted') { alert('Нужно разрешение на уведомления'); return; }
             try {
                 const reg = await navigator.serviceWorker.ready;
                 const sub = await reg.pushManager.subscribe({
                     userVisibleOnly: true,
                     applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
                 });
-                
-                // Временно выводим в консоль для копирования (до этапа с Cloudflare)
-                console.log('JSON подписки:', JSON.stringify(sub));
-                alert('Подписка активна! Теперь скопируй JSON из консоли (временно) или дождись этапа 1');
+                console.log(JSON.stringify(sub));
+                alert('Подписка активна! ✨');
                 updateStatus(true);
-            } catch (err) {
-                console.error(err);
-                alert('Ошибка подписки: ' + err.message);
-            }
+            } catch (err) { alert('Ошибка: ' + err.message); }
         }
 
         function urlBase64ToUint8Array(base64String) {

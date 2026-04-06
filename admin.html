@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MASTER ONE | Админка</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: #efe9df;
+            color: #6b6155;
+        }
+        .container { width: 100%; max-width: 500px; text-align: center; }
+        h1 { color: #af914e; letter-spacing: 0.2em; margin-bottom: 2rem; font-weight: 300; }
+        
+        .glass {
+            background: rgba(255,255,255,0.4);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 10px 40px rgba(175,145,78,0.1);
+            text-align: left;
+            margin-bottom: 1.5rem;
+        }
+
+        label { display: block; font-size: 0.8rem; color: #b5a998; margin: 1rem 0 0.3rem 0.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
+        input, textarea {
+            width: 100%; padding: 1rem; border: 1px solid rgba(175,145,78,0.15); border-radius: 14px;
+            background: rgba(255,255,255,0.6); color: #5a5245; font-family: inherit; font-size: 1rem; outline: none;
+        }
+        input:focus, textarea:focus { border-color: #af914e; background: white; }
+
+        button {
+            width: 100%; padding: 1.2rem; border: none; border-radius: 16px;
+            background: linear-gradient(135deg, #c4a35a, #af914e);
+            color: white; font-family: inherit; font-size: 1.1rem;
+            cursor: pointer; transition: 0.3s; margin-top: 1.5rem;
+            box-shadow: 0 5px 20px rgba(175,145,78,0.3);
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(175,145,78,0.4); }
+
+        .command-box {
+            background: #2a2a2a; color: #a8c686; padding: 1rem; border-radius: 12px;
+            font-family: monospace; font-size: 0.85rem; word-break: break-all;
+            margin-top: 1rem; position: relative; cursor: pointer;
+        }
+        .command-box::after { content: 'Нажми, чтобы скопировать'; position: absolute; bottom: -20px; right: 0; font-size: 0.7rem; color: #c4b8a8; }
+        
+        #auth-screen { position: fixed; inset: 0; background: #efe9df; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-screen">
+        <div class="glass" style="max-width: 320px; text-align: center;">
+            <h1>Вход</h1>
+            <input type="password" id="pass" placeholder="Пароль">
+            <button onclick="checkPass()">Войти</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>АДМИН-ПАНЕЛЬ</h1>
+        
+        <div class="glass">
+            <label>Заголовок пуша</label>
+            <input type="text" id="title" value="MASTER ONE" placeholder="Что нового?">
+            
+            <label>Текст сообщения</label>
+            <textarea id="body" rows="3" placeholder="Введите текст уведомления...">Вышло новое видео! Смотри скорее.</textarea>
+            
+            <label>Ссылка (URL)</label>
+            <input type="url" id="url" placeholder="https://youtube.com/...">
+            
+            <button onclick="generateCommand()">СФОРМИРОВАТЬ КОМАНДУ</button>
+        </div>
+
+        <div id="result" style="display:none;">
+            <div class="section-title" style="color:#af914e; margin-top: 2rem; font-size: 0.8rem; text-align: center; text-transform: uppercase;">Скопируй и вставь в терминал:</div>
+            <div class="command-box" id="commandText" onclick="copyCommand()"></div>
+            <p id="copyMsg" style="color:#a8c686; font-size: 0.8rem; margin-top: 1rem; opacity: 0; transition: 0.3s;">Скопировано в буфер!</p>
+        </div>
+    </div>
+
+    <script>
+        function checkPass() {
+            if (document.getElementById('pass').value === 'master') { // Простейший пароль для начала
+                document.getElementById('auth-screen').style.display = 'none';
+            } else {
+                alert('Неверный пароль');
+            }
+        }
+
+        function generateCommand() {
+            const t = document.getElementById('title').value.replace(/"/g, '\\"');
+            const b = document.getElementById('body').value.replace(/"/g, '\\"');
+            const u = document.getElementById('url').value;
+            
+            const cmd = `node send-push.js "${t}" "${b}" "${u}"`;
+            
+            document.getElementById('commandText').textContent = cmd;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function copyCommand() {
+            const text = document.getElementById('commandText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const msg = document.getElementById('copyMsg');
+                msg.style.opacity = '1';
+                setTimeout(() => msg.style.opacity = '0', 2000);
+            });
+        }
+    </script>
+</body>
+</html>
