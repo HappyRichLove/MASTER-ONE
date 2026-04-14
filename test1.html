@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МАСТЕР | Прототипы</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1a1a1a; }
+        .serif { font-family: 'Lora', serif; }
+        .hide { display: none; }
+        .tab-active { border-bottom: 2px solid #1a1a1a; font-weight: 500; color: #1a1a1a; }
+        .tab-inactive { color: #6b7280; }
+        .tab-inactive:hover { color: #1a1a1a; }
+    </style>
+</head>
+<body class="antialiased selection:bg-gray-200">
+
+    <!-- Навигация по прототипам -->
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
+        <div class="max-w-4xl mx-auto px-4 flex justify-center gap-4 sm:gap-8 h-14 items-center text-xs sm:text-sm">
+            <button onclick="showTab('ghost')" id="tab-ghost" class="tab-active h-full px-2 transition-colors">Ghost / WordPress (Блог)</button>
+            <button onclick="showTab('telegram')" id="tab-telegram" class="tab-inactive h-full px-2 transition-colors">Лента Telegram (Статика)</button>
+            <button onclick="showTab('flarum')" id="tab-flarum" class="tab-inactive h-full px-2 transition-colors">Flarum (Дзен-форум)</button>
+        </div>
+    </nav>
+
+    <div class="pt-24 pb-16">
+        
+        <!-- Header -->
+        <header class="text-center mb-12 sm:mb-16">
+            <h1 class="text-2xl sm:text-3xl font-light tracking-[0.3em] text-gray-800 mb-2">М А С Т Е Р</h1>
+            <p class="text-gray-400 text-xs sm:text-sm tracking-widest uppercase">Архив знаний</p>
+        </header>
+
+        <!-- VIEW 1: GHOST / WORDPRESS -->
+        <div id="view-ghost" class="max-w-3xl mx-auto px-4">
+            <div class="space-y-16">
+                <!-- Статья 1 -->
+                <article class="group cursor-pointer">
+                    <div class="text-xs text-gray-400 mb-3 tracking-wider uppercase font-medium">Практика • 14 Апреля 2026</div>
+                    <h2 class="text-2xl sm:text-3xl serif mb-4 group-hover:text-gray-600 transition-colors leading-snug">Остановка внутреннего диалога: Путь без усилий</h2>
+                    <p class="text-gray-600 leading-relaxed mb-6 text-base sm:text-lg">
+                        Многие пытаются остановить мысли силой воли. Но ум питается вашим вниманием. Как только вы начинаете с ним бороться, вы даете ему энергию. Секрет заключается в тотальном игнорировании.
+                    </p>
+                    <div class="flex items-center gap-4 text-sm text-gray-500">
+                        <span class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-gray-200 overflow-hidden"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master&backgroundColor=e2e8f0" alt="Master"></div>
+                            Мастер
+                        </span>
+                        <span>•</span>
+                        <span>3 мин чтения</span>
+                    </div>
+                </article>
+                <hr class="border-gray-200">
+                <!-- Статья 2 -->
+                <article class="group cursor-pointer">
+                    <div class="text-xs text-gray-400 mb-3 tracking-wider uppercase font-medium">Ответы • 12 Апреля 2026</div>
+                    <h2 class="text-2xl sm:text-3xl serif mb-4 group-hover:text-gray-600 transition-colors leading-snug">Форма — это лишь временное ограничение</h2>
+                    <div class="aspect-video w-full bg-gray-100 rounded-xl mb-6 flex items-center justify-center border border-gray-200 overflow-hidden relative">
+                         <div class="absolute inset-0 bg-cover bg-center opacity-50" style="background-image: url('https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=1000&auto=format&fit=crop');"></div>
+                         <button class="w-16 h-16 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-sm z-10 hover:scale-105 transition-transform"><span class="ml-1 text-xl text-gray-800">▶</span></button>
+                    </div>
+                    <p class="text-gray-600 leading-relaxed mb-6 text-base sm:text-lg">Запись эфира с ответами на вопросы о привязанностях к материальному миру и страхе потерь.</p>
+                </article>
+            </div>
+        </div>
+
+        <!-- VIEW 2: TELEGRAM FEED -->
+        <div id="view-telegram" class="hide max-w-xl mx-auto px-4">
+            <div class="space-y-6">
+                <!-- Сообщение 1 -->
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master&backgroundColor=e2e8f0"></div>
+                            <div>
+                                <div class="font-medium text-sm">МАСТЕР</div>
+                                <div class="text-xs text-gray-400">Сегодня, 10:45</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="serif text-base sm:text-lg leading-relaxed mb-4 text-gray-800">
+                        Остановка внутреннего диалога начинается не с борьбы с мыслями, а с отсутствия интереса к ним. Позвольте им проходить мимо, как облакам. Послушайте сегодняшнюю практику.
+                    </p>
+                    <!-- Аудио плеер -->
+                    <div class="bg-gray-50 rounded-full py-2 px-3 sm:px-4 flex items-center gap-3 sm:gap-4 mb-5 border border-gray-100">
+                        <button class="w-8 h-8 shrink-0 bg-gray-800 text-white rounded-full flex items-center justify-center pl-1 text-sm hover:bg-gray-700 transition-colors">▶</button>
+                        <div class="h-1 bg-gray-200 flex-1 rounded-full"><div class="w-1/3 h-full bg-gray-800 rounded-full"></div></div>
+                        <span class="text-xs text-gray-500 font-mono shrink-0">03:15</span>
+                    </div>
+                    <div class="border-t border-gray-50 pt-3">
+                        <button class="text-sm text-blue-500 hover:text-blue-600 font-medium flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1.5 22.5l6.35-1.37c1.25.56 2.65.87 4.15.87 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.34 0-2.61-.31-3.76-.84l-.27-.12-4.1.88.89-3.95-.14-.28C4.15 14.51 3.5 13.3 3.5 12c0-4.69 3.81-8.5 8.5-8.5s8.5 3.81 8.5 8.5-3.81 8.5-8.5 8.5z"/></svg>
+                            Обсудить в Telegram <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full text-xs">12</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Сообщение 2 -->
+                <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master&backgroundColor=e2e8f0"></div>
+                            <div>
+                                <div class="font-medium text-sm">МАСТЕР</div>
+                                <div class="text-xs text-gray-400">Вчера, 19:20</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aspect-video w-full bg-gray-100 rounded-xl mb-5 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-12 h-12 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-sm text-gray-800 text-lg pl-1 cursor-pointer hover:scale-105 transition-transform">▶</div>
+                        </div>
+                    </div>
+                    <p class="serif text-base sm:text-lg leading-relaxed mb-4 text-gray-800">
+                        Форма — это лишь временное ограничение пространства. Не привязывайтесь к формам.
+                    </p>
+                    <div class="border-t border-gray-50 pt-3">
+                        <button class="text-sm text-blue-500 hover:text-blue-600 font-medium flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1.5 22.5l6.35-1.37c1.25.56 2.65.87 4.15.87 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.34 0-2.61-.31-3.76-.84l-.27-.12-4.1.88.89-3.95-.14-.28C4.15 14.51 3.5 13.3 3.5 12c0-4.69 3.81-8.5 8.5-8.5s8.5 3.81 8.5 8.5-3.81 8.5-8.5 8.5z"/></svg>
+                            Обсудить в Telegram <span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full text-xs">4</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIEW 3: FLARUM ZEN -->
+        <div id="view-flarum" class="hide max-w-3xl mx-auto px-4">
+            <div class="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 mb-8">
+                <div class="flex gap-4 w-full sm:w-auto">
+                    <select class="bg-white border border-gray-200 text-sm rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-gray-200 w-full sm:w-auto">
+                        <option>Последние обновления</option>
+                        <option>Новые темы</option>
+                        <option>Популярное</option>
+                    </select>
+                </div>
+                <button class="bg-gray-900 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors shadow-sm w-full sm:w-auto">Создать тему</button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Тема 1 -->
+                <div class="p-4 sm:p-5 border-b border-gray-50 hover:bg-gray-50 transition-colors flex items-start gap-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden hidden sm:block"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Alex&backgroundColor=e2e8f0"></div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1.5 text-sm">
+                            <span class="font-medium text-gray-900">Александр</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-400 text-xs">2 часа назад</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-1.5 truncate">Как сохранить осознанность в конфликте?</h3>
+                        <p class="text-gray-500 text-sm line-clamp-1 mb-2.5">На работе часто возникают стрессовые ситуации, и я моментально теряю состояние свидетеля, вовлекаясь в эмоции...</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-gray-100 text-gray-600">Вопрос</span>
+                        </div>
+                    </div>
+                    <div class="shrink-0 flex items-center gap-1.5 text-gray-400 text-sm bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 mt-1">
+                        <span>💬</span> 8
+                    </div>
+                </div>
+
+                <!-- Тема 2 -->
+                <div class="p-4 sm:p-5 border-b border-gray-50 hover:bg-gray-50 transition-colors flex items-start gap-4 cursor-pointer bg-blue-50/20">
+                    <div class="w-10 h-10 rounded-full bg-gray-200 shrink-0 overflow-hidden hidden sm:block"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master&backgroundColor=e2e8f0"></div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1.5 text-sm">
+                            <span class="font-medium text-gray-900">МАСТЕР</span>
+                            <span class="bg-gray-800 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">АДМИН</span>
+                            <span class="text-gray-400">•</span>
+                            <span class="text-gray-400 text-xs">Вчера</span>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-medium text-gray-900 mb-1.5 truncate">Практика: Остановка внутреннего диалога</h3>
+                        <p class="text-gray-500 text-sm line-clamp-1 mb-2.5">Сегодня мы поговорим о том, почему борьба с мыслями только усиливает их. Ум питается вашим вниманием...</p>
+                        <div class="flex gap-2">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-blue-100 text-blue-600">Практика</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-purple-100 text-purple-600">Аудио</span>
+                        </div>
+                    </div>
+                    <div class="shrink-0 flex flex-col items-end gap-1 mt-1">
+                        <div class="flex items-center gap-1.5 text-gray-400 text-sm bg-white px-3 py-1.5 rounded-lg border border-gray-100 shadow-sm">
+                            <span>💬</span> 42
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Скрываем все
+            document.getElementById('view-ghost').classList.add('hide');
+            document.getElementById('view-telegram').classList.add('hide');
+            document.getElementById('view-flarum').classList.add('hide');
+            
+            // Сбрасываем стили кнопок
+            document.getElementById('tab-ghost').className = 'tab-inactive h-full px-2 transition-colors';
+            document.getElementById('tab-telegram').className = 'tab-inactive h-full px-2 transition-colors';
+            document.getElementById('tab-flarum').className = 'tab-inactive h-full px-2 transition-colors';
+            
+            // Показываем нужный
+            document.getElementById('view-' + tabName).classList.remove('hide');
+            document.getElementById('tab-' + tabName).className = 'tab-active h-full px-2 transition-colors';
+        }
+    </script>
+</body>
+</html>
