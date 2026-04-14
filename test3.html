@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МАСТЕР | Прототипы v3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        body { font-family: 'Inter', sans-serif; background-color: #Fdfbf7; color: #2C2C29; margin: 0; padding: 0; transition: background-color 0.3s; }
+        .serif { font-family: 'Lora', serif; }
+        .hide { display: none !important; }
+        
+        /* Навигация */
+        .tab-active { border-bottom: 2px solid #2C2C29; font-weight: 500; color: #2C2C29; }
+        .tab-inactive { color: #8A8A86; }
+        .tab-inactive:hover { color: #2C2C29; }
+
+        /* --- СТИЛИ ДЛЯ ВАРИАНТА 1: GHOST / WP (Дзен) --- */
+        .zen-bg { background-color: #Fdfbf7; }
+        .zen-text { color: #2C2C29; }
+        .zen-text-muted { color: #8A8A86; }
+        .zen-accent { color: #8B7355; }
+        .zen-border { border-color: #E8E5DF; }
+        .zen-card { background: white; border: 1px solid #E8E5DF; border-radius: 4px; transition: transform 0.2s; }
+        .zen-card:hover { transform: translateY(-2px); }
+
+        /* --- СТИЛИ ДЛЯ ВАРИАНТА 2: ТЕЛЕГРАМ (РЕАЛИСТИЧНЫЙ) --- */
+        .tg-viewport { background-color: #92a4b0; background-image: url('https://telegram.org/file/464001088/1/5bU4AKZwBBM.249258/1c8e1e7faeec397de5'); background-size: cover; background-attachment: fixed; position: relative; }
+        
+        /* Стеклянный эффект как на скриншотах */
+        .tg-glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); }
+        .tg-glass-dark { background: rgba(0, 0, 0, 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: white; }
+        
+        .tg-header-pill { border-radius: 20px; padding: 4px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 140px; }
+        
+        .tg-bubble { background-color: #ffffff; border-radius: 12px; position: relative; max-width: 85%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .tg-bubble-tail {
+            position: absolute; left: -8px; bottom: 0; width: 12px; height: 18px;
+            background: radial-gradient(circle at top left, transparent 10px, #ffffff 10px);
+        }
+        
+        .tg-reaction { background: rgba(51, 144, 236, 0.08); border-radius: 10px; padding: 2px 8px; display: flex; items-center: center; gap: 4px; font-size: 13px; border: 1px solid transparent; }
+        .tg-reaction:hover { background: rgba(51, 144, 236, 0.12); }
+        
+        .tg-audio-wave { height: 24px; display: flex; align-items: center; gap: 1px; flex: 1; margin: 0 8px; }
+        .tg-wave-bar { width: 2px; background: #3390ec; border-radius: 1px; }
+
+        .tg-pinned { border-radius: 0 0 12px 12px; border-top: 1px solid rgba(0,0,0,0.05); }
+        
+        .tg-btn-round { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .tg-forward-btn { position: absolute; right: -45px; bottom: 0; color: white; background: rgba(0,0,0,0.2); width: 32px; height: 32px; border-radius: 50%; display: flex; items-center: center; justify-content: center; }
+
+        /* Кастомный скроллбар */
+        .tg-scroll::-webkit-scrollbar { width: 4px; }
+        .tg-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Переключатель прототипов (Интерфейс разработчика) -->
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-[200]">
+        <div class="max-w-4xl mx-auto px-4 flex justify-center gap-6 h-12 items-center text-sm font-medium">
+            <button onclick="switchMode('ghost')" id="tab-ghost" class="tab-active h-full px-2">Дзен-Блог (WP)</button>
+            <button onclick="switchMode('telegram')" id="tab-telegram" class="tab-inactive h-full px-2">Telegram (Как в приложении)</button>
+        </div>
+    </nav>
+
+    <!-- ВЬЮХА 1: GHOST / WORDPRESS (ДЗЕН) -->
+    <div id="view-ghost" class="pt-20 pb-24 zen-bg min-h-screen">
+        <div id="ghost-feed" class="max-w-xl mx-auto px-6">
+            <header class="text-center py-20">
+                <h1 class="text-4xl font-light tracking-[0.5em] zen-text mb-4 uppercase">Мастер</h1>
+                <p class="zen-text-muted text-xs tracking-[0.3em] uppercase opacity-60 italic">Путь к себе через тишину</p>
+            </header>
+
+            <div class="space-y-24">
+                <article class="cursor-pointer group" onclick="showGhostPost()">
+                    <div class="zen-accent text-[10px] tracking-[0.2em] uppercase mb-6 font-semibold">14 Апреля • Практика</div>
+                    <h2 class="text-3xl serif leading-tight zen-text mb-6 group-hover:text-[#8B7355] transition-colors">Остановка внутреннего диалога: С чего начать?</h2>
+                    <p class="text-gray-600 leading-relaxed text-lg mb-8">
+                        Ум — это инструмент, а не хозяин. Большинство проблем современного человека проистекают из невозможности нажать кнопку «выкл». Мы научимся не бороться с мыслями, а просто лишать их своего внимания.
+                    </p>
+                    <div class="flex items-center justify-between border-t zen-border pt-6">
+                        <span class="text-xs zen-text-muted italic">Читать полностью →</span>
+                        <div class="flex gap-4 items-center opacity-40">
+                             <span class="text-xs">💬 12</span>
+                             <span class="text-xs">👁️ 1.4k</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="cursor-pointer group">
+                    <div class="zen-accent text-[10px] tracking-[0.2em] uppercase mb-6 font-semibold">12 Апреля • Видео</div>
+                    <div class="relative aspect-video mb-8 overflow-hidden rounded-sm grayscale-[20%] group-hover:grayscale-0 transition-all">
+                        <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/5 group-hover:bg-transparent transition-colors">
+                            <div class="w-14 h-14 border border-white/50 rounded-full flex items-center justify-center">
+                                <div class="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl serif leading-tight zen-text mb-6">Монастырь в сердце</h2>
+                    <p class="text-gray-600 leading-relaxed text-lg mb-8">
+                        Монастырь — это не стены. Это состояние, в котором вы пребываете, даже находясь в центре шумного мегаполиса.
+                    </p>
+                </article>
+            </div>
+        </div>
+
+        <!-- Детальная страница поста -->
+        <div id="ghost-post" class="hide max-w-xl mx-auto px-6 pt-10">
+            <button onclick="hideGhostPost()" class="text-xs zen-text-muted hover:text-black mb-12 tracking-widest uppercase">← К списку практик</button>
+            <article class="prose prose-stone prose-lg">
+                <h1 class="serif text-4xl zen-text mb-8">Остановка внутреннего диалога: С чего начать?</h1>
+                <div class="zen-text space-y-8 text-lg leading-relaxed">
+                    <p>Представьте, что ваш ум — это радиоприемник, который работает на полную громкость 24/7. Даже когда вы спите, он продолжает вещать. Остановка диалога — это не поломка радио, это способность убавить звук до нуля.</p>
+                    <p>Первый шаг — перестать подпитывать мысли эмоциями. Мысль сама по себе нейтральна. Она становится «важной», только когда вы на нее реагируете.</p>
+                    <div class="bg-[#F8F6F2] p-8 border-l border-zen-accent italic text-gray-600">
+                        «Тишина — это единственное место, где вы можете услышать голос Истины.»
+                    </div>
+                    <p>Попробуйте сегодня вечером просто наблюдать. Не исправлять, не анализировать, а просто смотреть.</p>
+                </div>
+            </article>
+            <!-- Блок комментов -->
+            <div class="mt-24 border-t zen-border pt-12">
+                <h3 class="serif text-2xl mb-10">Пространство для слов</h3>
+                <div class="space-y-12">
+                    <div class="flex gap-6 items-start">
+                        <div class="w-12 h-12 rounded-full bg-gray-100 shrink-0 border zen-border"></div>
+                        <div class="flex-1">
+                            <div class="font-medium text-sm mb-2">Анна</div>
+                            <p class="text-gray-600 text-base">После прочтения захотелось просто посидеть в тишине. Спасибо, Мастер.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ВЬЮХА 2: ТЕЛЕГРАМ (ТОЧНАЯ КОПИЯ) -->
+    <div id="view-telegram" class="hide tg-viewport min-h-screen pt-12 flex justify-center">
+        
+        <div class="w-full max-w-lg bg-transparent flex flex-col h-[calc(100vh-48px)]">
+            
+            <!-- HEADER (Frosted Glass Pill) -->
+            <div class="px-3 pt-3 pb-1 sticky top-0 z-50">
+                <div class="tg-glass rounded-[24px] px-4 py-2 flex items-center justify-between shadow-sm border border-white/20">
+                    <div class="flex items-center gap-3">
+                        <button class="text-black/70">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <div class="bg-black/10 px-3 py-1 rounded-full text-xs font-bold">1402</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="font-bold text-[16px] leading-tight">Мастер</div>
+                        <div class="text-[11px] text-gray-500">9.489 подписчиков</div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full overflow-hidden border border-white/50">
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                
+                <!-- Pinned Message -->
+                <div class="mt-1 tg-glass px-4 py-1.5 flex items-center justify-between rounded-bl-xl rounded-br-xl text-xs border-t border-white/10">
+                    <div class="flex items-center gap-3">
+                        <div class="w-[2px] h-6 bg-green-500 rounded-full"></div>
+                        <div>
+                            <div class="text-green-600 font-bold">Закреплённое сообщение</div>
+                            <div class="text-gray-600 truncate max-w-[200px]">Работаю только с учениками. Чтобы пройти...</div>
+                        </div>
+                    </div>
+                    <button class="text-gray-400">✕</button>
+                </div>
+            </div>
+
+            <!-- MESSAGES FEED -->
+            <div id="tg-main-feed" class="flex-1 overflow-y-auto px-4 space-y-3 py-4 tg-scroll">
+                
+                <!-- Date Pill -->
+                <div class="flex justify-center my-4">
+                    <div class="tg-glass px-4 py-1 rounded-full text-[13px] font-medium text-gray-600 border border-white/20">23 февраля</div>
+                </div>
+
+                <!-- Voice Message Post -->
+                <div class="relative mb-6">
+                    <div class="absolute -left-10 bottom-0 w-8 h-8 rounded-full overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master" class="w-full h-full">
+                    </div>
+                    <div class="tg-bubble p-2">
+                        <div class="text-blue-500 font-bold text-[14px] mb-2 cursor-pointer">Мастер</div>
+                        
+                        <div class="flex items-center gap-3 mb-3 pr-8">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                            <div class="flex-1">
+                                <div class="tg-audio-wave">
+                                    <div class="tg-wave-bar h-2"></div><div class="tg-wave-bar h-4"></div><div class="tg-wave-bar h-6"></div><div class="tg-wave-bar h-4"></div><div class="tg-wave-bar h-5"></div><div class="tg-wave-bar h-3"></div><div class="tg-wave-bar h-6"></div><div class="tg-wave-bar h-4"></div><div class="tg-wave-bar h-5"></div><div class="tg-wave-bar h-4"></div><div class="tg-wave-bar h-3"></div><div class="tg-wave-bar h-5"></div>
+                                </div>
+                                <div class="text-[11px] text-gray-400 ml-2">2:47</div>
+                            </div>
+                            <button class="text-blue-500 bg-blue-50 px-2 py-0.5 rounded text-[10px] font-bold">→A</button>
+                        </div>
+
+                        <div class="text-[16px] mb-3">🙏 ❤️</div>
+
+                        <!-- Reactions -->
+                        <div class="flex flex-wrap gap-1.5 mb-2">
+                            <div class="tg-reaction"><span class="text-sm">❤️</span> <span class="text-blue-500 font-medium">222</span></div>
+                            <div class="tg-reaction"><span class="text-sm">🙏</span> <span class="text-blue-500 font-medium">93</span></div>
+                            <div class="tg-reaction"><span class="text-sm">🔥</span> <span class="text-blue-500 font-medium">50</span></div>
+                            <div class="tg-reaction"><span class="text-sm">🎉</span> <span class="text-blue-500 font-medium">27</span></div>
+                        </div>
+
+                        <div class="flex justify-end items-center gap-1 text-[11px] text-gray-400">
+                             <span>👁️ 8K</span>
+                             <span>13:47</span>
+                        </div>
+                        <div class="tg-bubble-tail"></div>
+                    </div>
+                    <button class="tg-forward-btn">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7-7 7v-4.1C9 14.9 6 18 6 18c0-5.6 4-10 9-11V5z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Date Pill -->
+                <div class="flex justify-center my-4">
+                    <div class="tg-glass px-4 py-1 rounded-full text-[13px] font-medium text-gray-600 border border-white/20">24 февраля</div>
+                </div>
+
+                <!-- Image Post -->
+                <div class="relative">
+                    <div class="absolute -left-10 bottom-0 w-8 h-8 rounded-full overflow-hidden">
+                        <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master" class="w-full h-full">
+                    </div>
+                    <div class="tg-bubble overflow-hidden">
+                        <div class="w-full aspect-[4/3] bg-gray-200">
+                            <img src="https://images.unsplash.com/photo-1545239351-ef35f43d514b?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-3">
+                            <h3 class="font-bold text-[16px] mb-2">Монастырь.</h3>
+                            <p class="text-[15px] leading-snug mb-3">монастырь это не место на карте и не всегда он сделан из кирпичей.</p>
+                            <button onclick="showTgComments()" class="w-full py-2.5 bg-blue-50 text-blue-500 rounded-lg font-bold text-[14px] flex items-center justify-between px-4">
+                                <span>Обсудить</span>
+                                <span class="opacity-50 font-normal">14 комментариев ›</span>
+                            </button>
+                            <div class="flex justify-end items-center gap-1 text-[11px] text-gray-400 mt-2">
+                                 <span>10:39</span>
+                            </div>
+                        </div>
+                        <div class="tg-bubble-tail"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BOTTOM BAR -->
+            <div class="px-4 py-2 sticky bottom-0 z-50 flex justify-center items-center gap-2">
+                <button class="tg-glass-dark w-12 h-12 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4M8 16l-4-4 4-4"/></svg>
+                </button>
+                <button class="tg-glass-dark flex-1 h-12 rounded-full font-bold">Убрать звук</button>
+                <button class="tg-glass-dark w-12 h-12 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </button>
+            </div>
+
+            <!-- OVERLAY: COMMENTS REPLIES -->
+            <div id="tg-replies" class="hide absolute inset-0 tg-viewport z-[100] flex flex-col">
+                <div class="tg-glass px-4 py-3 sticky top-0 flex items-center gap-4 border-b border-white/10">
+                    <button onclick="hideTgComments()" class="text-black/70">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <div>
+                        <div class="font-bold text-[16px]">Обсуждение</div>
+                        <div class="text-[11px] text-gray-500">14 комментариев</div>
+                    </div>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 tg-scroll">
+                    <!-- Comment 1 -->
+                    <div class="flex items-end gap-2">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xs shrink-0">А</div>
+                        <div class="tg-bubble p-2 rounded-bl-none">
+                            <div class="text-orange-600 font-bold text-[13px] mb-0.5">Анна</div>
+                            <p class="text-[14px]">Благодарю за эти слова. В самое сердце.</p>
+                            <div class="flex justify-end text-[10px] text-gray-400">11:05</div>
+                            <div class="absolute left-[-8px] bottom-0 w-2 h-4 bg-white" style="clip-path: polygon(100% 0, 0% 100%, 100% 100%);"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input bar -->
+                <div class="bg-white px-4 py-2 flex items-end gap-3 border-t">
+                    <div class="flex-1 bg-gray-100 rounded-2xl px-4 py-2 text-sm text-gray-400">Написать комментарий...</div>
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white">
+                        <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchMode(mode) {
+            document.getElementById('tab-ghost').className = 'tab-inactive h-full px-2';
+            document.getElementById('tab-telegram').className = 'tab-inactive h-full px-2';
+            document.getElementById('tab-' + mode).className = 'tab-active h-full px-2';
+            
+            document.getElementById('view-ghost').classList.add('hide');
+            document.getElementById('view-telegram').classList.add('hide');
+            document.getElementById('view-' + mode).classList.remove('hide');
+        }
+
+        function showGhostPost() {
+            document.getElementById('ghost-feed').classList.add('hide');
+            document.getElementById('ghost-post').classList.remove('hide');
+            window.scrollTo(0,0);
+        }
+        function hideGhostPost() {
+            document.getElementById('ghost-post').classList.add('hide');
+            document.getElementById('ghost-feed').classList.remove('hide');
+        }
+
+        function showTgComments() {
+            document.getElementById('tg-replies').classList.remove('hide');
+        }
+        function hideTgComments() {
+            document.getElementById('tg-replies').classList.add('hide');
+        }
+    </script>
+</body>
+</html>
