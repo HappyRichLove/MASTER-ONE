@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МАСТЕР | Прототипы v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        body { font-family: 'Inter', sans-serif; background-color: #Fdfbf7; color: #2C2C29; margin: 0; padding: 0; }
+        .serif { font-family: 'Lora', serif; }
+        .hide { display: none !important; }
+        
+        /* Навигация */
+        .tab-active { border-bottom: 2px solid #2C2C29; font-weight: 500; color: #2C2C29; }
+        .tab-inactive { color: #8A8A86; }
+        .tab-inactive:hover { color: #2C2C29; }
+
+        /* --- СТИЛИ ДЛЯ ВАРИАНТА 1: GHOST / WP (Дзен) --- */
+        .zen-bg { background-color: #Fdfbf7; } /* Теплый бумажный оттенок */
+        .zen-text { color: #2C2C29; }
+        .zen-text-muted { color: #8A8A86; }
+        .zen-accent { color: #8B7355; } /* Приглушенный земляной/чайный цвет */
+        .zen-border { border-color: #E8E5DF; }
+        
+        /* Комментарии в Дзен-стиле */
+        .zen-comment-box { background-color: #FFFFFF; border: 1px solid #E8E5DF; border-radius: 12px; }
+
+        /* --- СТИЛИ ДЛЯ ВАРИАНТА 2: ТЕЛЕГРАМ --- */
+        .tg-bg { background-color: #92a4b0; background-image: url('https://telegram.org/file/464001088/1/5bU4AKZwBBM.249258/1c8e1e7faeec397de5'); background-size: cover; background-attachment: fixed; }
+        /* Светлая тема ТГ */
+        .tg-bubble { background-color: #ffffff; border-radius: 16px 16px 16px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; }
+        .tg-bubble::before {
+            content: ''; position: absolute; left: -8px; bottom: 0;
+            width: 8px; height: 16px;
+            background: radial-gradient(circle at top left, transparent 8px, #ffffff 8px);
+        }
+        .tg-header { background-color: #ffffff; border-bottom: 1px solid #e0e0e0; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .tg-text { color: #000000; font-size: 15px; line-height: 1.4; }
+        .tg-blue { color: #3390ec; }
+        .tg-time { color: #a1aab3; font-size: 11px; }
+        .tg-audio-bg { background-color: #f4f4f5; border-radius: 20px; }
+        .tg-audio-btn { background-color: #3390ec; color: white; }
+        
+        .tg-comment-btn { 
+            background-color: rgba(51, 144, 236, 0.08); 
+            color: #3390ec; 
+            border-radius: 8px; 
+            font-weight: 500;
+        }
+        .tg-comment-btn:hover { background-color: rgba(51, 144, 236, 0.15); }
+
+        /* Имитация страницы комментариев ТГ */
+        .tg-replies-header { background-color: #ffffff; border-bottom: 1px solid #e0e0e0; }
+        .tg-reply-bubble { background-color: #ffffff; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .tg-input-bar { background-color: #ffffff; border-top: 1px solid #e0e0e0; }
+    </style>
+</head>
+<body class="antialiased selection:bg-gray-200" id="body-container">
+
+    <!-- Верхняя навигация прототипа -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 z-[100]" id="main-nav">
+        <div class="max-w-4xl mx-auto px-4 flex justify-center gap-6 h-12 items-center text-sm">
+            <button onclick="switchMode('ghost')" id="tab-ghost" class="tab-active h-full px-2 transition-colors">Wordpress (Дзен-блог)</button>
+            <button onclick="switchMode('telegram')" id="tab-telegram" class="tab-inactive h-full px-2 transition-colors">Telegram (Лента)</button>
+        </div>
+    </nav>
+
+    <!-- ВЬЮХА 1: GHOST / WORDPRESS (ДЗЕН) -->
+    <div id="view-ghost" class="pt-24 pb-24 zen-bg min-h-screen">
+        
+        <!-- Лента (Список постов) -->
+        <div id="ghost-feed" class="max-w-2xl mx-auto px-5">
+            <header class="text-center mb-16">
+                <h1 class="text-3xl font-light tracking-[0.4em] zen-text mb-3">М А С Т Е Р</h1>
+                <p class="zen-text-muted text-xs tracking-widest uppercase">пространство тишины</p>
+            </header>
+
+            <div class="space-y-16">
+                <!-- Статья 1 -->
+                <article class="group cursor-pointer" onclick="showGhostPost()">
+                    <div class="text-xs zen-accent mb-3 tracking-widest uppercase font-medium">Практика • 14 Апреля 2026</div>
+                    <h2 class="text-3xl serif mb-4 zen-text group-hover:opacity-70 transition-opacity leading-snug">Остановка внутреннего диалога: Путь без усилий</h2>
+                    <p class="zen-text-muted leading-relaxed mb-6 text-lg">
+                        Многие пытаются остановить мысли силой воли. Но ум питается вашим вниманием. Как только вы начинаете с ним бороться, вы даете ему энергию. Секрет заключается в тотальном игнорировании.
+                    </p>
+                    <div class="flex items-center gap-3 text-sm zen-text-muted">
+                        <span class="zen-text border-b border-gray-300 pb-0.5">Читать далее</span>
+                        <span>•</span>
+                        <span>💬 12 комментариев</span>
+                    </div>
+                </article>
+                
+                <hr class="zen-border">
+                
+                <!-- Статья 2 -->
+                <article class="group cursor-pointer">
+                    <div class="text-xs zen-accent mb-3 tracking-widest uppercase font-medium">Ответы • 12 Апреля 2026</div>
+                    <h2 class="text-3xl serif mb-4 zen-text group-hover:opacity-70 transition-opacity leading-snug">Форма — это лишь временное ограничение</h2>
+                    <div class="aspect-video w-full bg-[#E8E5DF] rounded-sm mb-6 flex items-center justify-center relative overflow-hidden">
+                         <div class="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-multiply" style="background-image: url('https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=1000&auto=format&fit=crop');"></div>
+                         <button class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-sm z-10 transition-transform"><span class="ml-1 text-xl zen-text">▶</span></button>
+                    </div>
+                    <p class="zen-text-muted leading-relaxed mb-6 text-lg">Запись эфира с ответами на вопросы о привязанностях к материальному миру и страхе потерь.</p>
+                </article>
+            </div>
+        </div>
+
+        <!-- Детальная страница поста (Дзен) -->
+        <div id="ghost-post" class="hide max-w-2xl mx-auto px-5">
+            <button onclick="hideGhostPost()" class="mb-10 text-sm zen-text-muted hover:text-black flex items-center gap-2 transition-colors">
+                <span>←</span> Назад к ленте
+            </button>
+
+            <article class="mb-16">
+                <div class="text-xs zen-accent mb-4 tracking-widest uppercase font-medium">Практика • 14 Апреля 2026</div>
+                <h1 class="text-4xl serif mb-8 zen-text leading-tight">Остановка внутреннего диалога: Путь без усилий</h1>
+                
+                <div class="prose prose-lg max-w-none zen-text leading-relaxed space-y-6">
+                    <p>Многие пытаются остановить мысли силой воли. Но ум питается вашим вниманием. Как только вы начинаете с ним бороться, вы даете ему энергию.</p>
+                    <p>Секрет заключается в тотальном игнорировании. Представьте, что ваши мысли — это прохожие на улице. Вы сидите на скамейке и просто смотрите, как они проходят мимо. Вы не вскакиваете, чтобы поспорить с каждым из них. Вы не бежите за ними. Вы просто сидите.</p>
+                    
+                    <div class="bg-white p-6 border-l-2 border-[#8B7355] my-8 text-lg serif italic text-gray-600">
+                        "Тишина — это не отсутствие звуков. Тишина — это отсутствие оценивающего ума."
+                    </div>
+
+                    <p>Практикуйте это сегодня хотя бы 5 минут. Не боритесь. Сдайтесь этому моменту.</p>
+                </div>
+            </article>
+
+            <!-- Блок комментариев (Дзен) -->
+            <div class="border-t zen-border pt-12">
+                <h3 class="text-xl serif zen-text mb-8">Обсуждение (12)</h3>
+                
+                <!-- Форма ввода -->
+                <div class="zen-comment-box p-4 mb-10">
+                    <textarea placeholder="Поделитесь вашим состоянием..." class="w-full bg-transparent resize-none outline-none text-gray-800 placeholder-gray-400 min-h-[80px]"></textarea>
+                    <div class="flex justify-between items-center mt-2 pt-2 border-t border-gray-100">
+                        <span class="text-xs text-gray-400">Войдите через Telegram или VK</span>
+                        <button class="bg-[#2C2C29] text-white px-5 py-2 rounded-md text-sm hover:bg-black transition-colors">Отправить</button>
+                    </div>
+                </div>
+
+                <!-- Список комментов -->
+                <div class="space-y-8">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-[#E8E5DF] shrink-0"></div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-medium text-sm zen-text">Елена</span>
+                                <span class="text-xs zen-text-muted">2 часа назад</span>
+                            </div>
+                            <p class="text-gray-700 leading-relaxed text-sm">Сегодня во время практики впервые почувствовала эту границу: вот мысль, а вот я, которая на нее смотрит. Удивительное чувство освобождения.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-[#E8E5DF] shrink-0"></div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-medium text-sm zen-text">Михаил</span>
+                                <span class="text-xs zen-text-muted">Вчера</span>
+                            </div>
+                            <p class="text-gray-700 leading-relaxed text-sm">Самое сложное — не вовлекаться в мысли о работе. Они как будто имеют магнитящий эффект.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ВЬЮХА 2: ТЕЛЕГРАМ (1 В 1) -->
+    <div id="view-telegram" class="hide tg-bg min-h-screen pt-12 flex justify-center">
+        
+        <!-- Контейнер "телефона" / "окна десктопа" -->
+        <div class="w-full max-w-2xl bg-[#e6ebee] min-h-screen relative shadow-2xl flex flex-col">
+            
+            <!-- Шапка канала (Feed Header) -->
+            <div id="tg-feed-header" class="tg-header px-4 py-2 sticky top-12 z-40 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold text-lg overflow-hidden">
+                    <img src="https://api.dicebear.com/7.x/notionists/svg?seed=Master&backgroundColor=e2e8f0" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                    <div class="font-semibold text-gray-900 leading-tight">МАСТЕР</div>
+                    <div class="text-xs text-gray-500">12 405 подписчиков</div>
+                </div>
+                <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+            </div>
+
+            <!-- Лента канала -->
+            <div id="tg-feed" class="flex-1 p-4 space-y-4 pb-20 tg-bg" style="background-image: url('https://telegram.org/file/464001088/1/5bU4AKZwBBM.249258/1c8e1e7faeec397de5');">
+                
+                <!-- Дата -->
+                <div class="text-center my-2">
+                    <span class="bg-black/20 text-white text-[13px] font-medium px-3 py-1 rounded-full backdrop-blur-sm">14 апреля</span>
+                </div>
+
+                <!-- Сообщение 1 -->
+                <div class="flex max-w-[90%]">
+                    <div class="tg-bubble p-2.5 pb-1">
+                        <div class="tg-blue font-medium text-[14px] mb-1 cursor-pointer">МАСТЕР</div>
+                        <p class="tg-text mb-1 whitespace-pre-wrap">Остановка внутреннего диалога начинается не с борьбы с мыслями, а с отсутствия интереса к ним. Позвольте им проходить мимо, как облакам.</p>
+                        
+                        <!-- Голосовое / Аудио -->
+                        <div class="tg-audio-bg p-2 flex items-center gap-3 mt-2 mb-1 cursor-pointer">
+                            <button class="w-10 h-10 rounded-full tg-audio-btn flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </button>
+                            <div class="flex-1">
+                                <div class="h-1 bg-gray-300 rounded-full w-full relative">
+                                    <div class="absolute left-0 top-0 h-full bg-[#3390ec] w-1/3 rounded-full"></div>
+                                    <div class="absolute left-1/3 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#3390ec] rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="text-[12px] text-gray-500 font-mono">03:15</div>
+                        </div>
+
+                        <!-- Время и просмотры -->
+                        <div class="flex justify-end items-center gap-1 tg-time mt-1">
+                            <span>10:45</span>
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 7C15 10.866 11.866 14 8 14C4.13401 14 1 10.866 1 7C1 3.13401 4.13401 0 8 0C11.866 0 15 3.13401 15 7Z" fill="currentColor" fill-opacity="0.15"/><path d="M11.5 4.5L6.5 9.5L4 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <span>4.2K</span>
+                        </div>
+                        
+                        <!-- Кнопка комментариев -->
+                        <div class="mt-2 mb-1">
+                            <button onclick="showTgPost()" class="w-full py-2 tg-comment-btn flex items-center justify-between px-3 text-[14px]">
+                                <span class="flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1.5 22.5l6.35-1.37c1.25.56 2.65.87 4.15.87 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.34 0-2.61-.31-3.76-.84l-.27-.12-4.1.88.89-3.95-.14-.28C4.15 14.51 3.5 13.3 3.5 12c0-4.69 3.81-8.5 8.5-8.5s8.5 3.81 8.5 8.5-3.81 8.5-8.5 8.5z"/></svg>
+                                    12 комментариев
+                                </span>
+                                <span>›</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center my-2 mt-6">
+                    <span class="bg-black/20 text-white text-[13px] font-medium px-3 py-1 rounded-full backdrop-blur-sm">12 апреля</span>
+                </div>
+
+                <!-- Сообщение 2 -->
+                <div class="flex max-w-[90%]">
+                    <div class="tg-bubble p-1.5 pb-1">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&fit=crop" class="w-full rounded-tl-xl rounded-tr-xl rounded-br-xl mb-1 object-cover max-h-[300px] cursor-pointer">
+                        <div class="px-2">
+                            <p class="tg-text mb-1">Форма — это лишь временное ограничение пространства. Не привязывайтесь к формам.</p>
+                            <div class="flex justify-end items-center gap-1 tg-time">
+                                <span>19:20</span>
+                                <span>5.1K</span>
+                            </div>
+                            <div class="mt-2 mb-1">
+                                <button class="w-full py-2 tg-comment-btn flex items-center justify-between px-3 text-[14px]">
+                                    <span class="flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1.5 22.5l6.35-1.37c1.25.56 2.65.87 4.15.87 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.34 0-2.61-.31-3.76-.84l-.27-.12-4.1.88.89-3.95-.14-.28C4.15 14.51 3.5 13.3 3.5 12c0-4.69 3.81-8.5 8.5-8.5s8.5 3.81 8.5 8.5-3.81 8.5-8.5 8.5z"/></svg>
+                                        Оставить комментарий
+                                    </span>
+                                    <span>›</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ИМИТАЦИЯ СТРАНИЦЫ ОБСУЖДЕНИЯ (REPLIES) -->
+            <div id="tg-post" class="hide absolute inset-0 bg-[#e6ebee] z-50 flex flex-col" style="background-image: url('https://telegram.org/file/464001088/1/5bU4AKZwBBM.249258/1c8e1e7faeec397de5');">
+                
+                <!-- Шапка комментариев -->
+                <div class="tg-replies-header px-4 py-3 flex items-center gap-4 shrink-0 shadow-sm z-10 relative bg-white">
+                    <button onclick="hideTgPost()" class="text-gray-500 hover:text-gray-800">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </button>
+                    <div>
+                        <div class="font-medium text-gray-900 text-lg leading-tight">Обсуждение</div>
+                        <div class="text-[13px] text-gray-500">12 комментариев</div>
+                    </div>
+                </div>
+
+                <!-- Оригинальный пост закрепленный -->
+                <div class="bg-white/80 backdrop-blur border-b border-gray-200 p-3 shrink-0 flex items-start gap-3">
+                    <div class="w-[3px] bg-[#3390ec] rounded-full self-stretch"></div>
+                    <div>
+                        <div class="text-[#3390ec] text-[13px] font-medium mb-0.5">МАСТЕР</div>
+                        <p class="text-[14px] text-gray-600 line-clamp-1">Остановка внутреннего диалога начинается не с борьбы с мыслями...</p>
+                    </div>
+                </div>
+
+                <!-- Лента комментариев -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                    
+                    <!-- Комментарий 1 -->
+                    <div class="flex gap-2">
+                        <div class="w-9 h-9 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold shrink-0 mt-auto mb-1">Е</div>
+                        <div class="tg-reply-bubble p-2.5 pb-1 min-w-[120px] max-w-[85%] rounded-bl-none relative">
+                            <!-- Хвостик пузыря слева -->
+                            <div class="absolute left-[-8px] bottom-0 w-2 h-4 bg-white" style="clip-path: polygon(100% 0, 0% 100%, 100% 100%);"></div>
+                            
+                            <div class="text-purple-600 font-medium text-[14px] mb-1">Елена</div>
+                            <p class="tg-text mb-1">Сегодня во время практики впервые почувствовала эту границу: вот мысль, а вот я, которая на нее смотрит. Удивительное чувство освобождения.</p>
+                            <div class="flex justify-end tg-time mt-1">11:05</div>
+                        </div>
+                    </div>
+
+                    <!-- Комментарий 2 -->
+                    <div class="flex gap-2">
+                        <div class="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold shrink-0 mt-auto mb-1">М</div>
+                        <div class="tg-reply-bubble p-2.5 pb-1 min-w-[120px] max-w-[85%] rounded-bl-none relative">
+                            <div class="absolute left-[-8px] bottom-0 w-2 h-4 bg-white" style="clip-path: polygon(100% 0, 0% 100%, 100% 100%);"></div>
+                            
+                            <div class="text-green-600 font-medium text-[14px] mb-1">Михаил</div>
+                            <p class="tg-text mb-1">Самое сложное — не вовлекаться в мысли о работе. Они как будто имеют магнитящий эффект.</p>
+                            <div class="flex justify-end tg-time mt-1">12:30</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Строка ввода комментария -->
+                <div class="tg-input-bar p-2.5 px-4 flex items-end gap-3 shrink-0 bg-white">
+                    <button class="text-gray-400 p-2 hover:bg-gray-100 rounded-full shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                    </button>
+                    <div class="flex-1 bg-[#f4f4f5] rounded-xl overflow-hidden min-h-[44px] flex items-center px-3">
+                        <textarea placeholder="Написать комментарий..." class="w-full bg-transparent resize-none outline-none text-[15px] py-3 max-h-[100px] text-black" rows="1"></textarea>
+                    </div>
+                    <button class="w-11 h-11 bg-[#3390ec] text-white rounded-full flex items-center justify-center shrink-0 hover:bg-blue-600 transition-colors shadow-md">
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchMode(mode) {
+            // Навигация
+            document.getElementById('tab-ghost').className = 'tab-inactive h-full px-2 transition-colors';
+            document.getElementById('tab-telegram').className = 'tab-inactive h-full px-2 transition-colors';
+            document.getElementById('tab-' + mode).className = 'tab-active h-full px-2 transition-colors';
+            
+            // Вьюхи
+            document.getElementById('view-ghost').classList.add('hide');
+            document.getElementById('view-telegram').classList.add('hide');
+            
+            document.getElementById('view-' + mode).classList.remove('hide');
+
+            // Цвет фона body
+            if (mode === 'ghost') {
+                document.body.style.backgroundColor = '#Fdfbf7';
+                document.getElementById('main-nav').classList.remove('hide');
+            } else {
+                document.body.style.backgroundColor = '#92a4b0';
+                // Скрываем верхнюю навигацию прототипа в режиме ТГ, чтобы погружение было полным
+                // Но оставим ее для переключения
+            }
+            
+            // Сброс стейтов
+            hideGhostPost();
+            hideTgPost();
+        }
+
+        // Логика Ghost
+        function showGhostPost() {
+            document.getElementById('ghost-feed').classList.add('hide');
+            document.getElementById('ghost-post').classList.remove('hide');
+            window.scrollTo(0,0);
+        }
+        function hideGhostPost() {
+            document.getElementById('ghost-post').classList.add('hide');
+            document.getElementById('ghost-feed').classList.remove('hide');
+        }
+
+        // Логика Telegram
+        function showTgPost() {
+            document.getElementById('tg-feed-header').classList.add('hide');
+            document.getElementById('tg-feed').classList.add('hide');
+            document.getElementById('tg-post').classList.remove('hide');
+            document.getElementById('tg-post').classList.add('flex'); // возвращаем flex
+        }
+        function hideTgPost() {
+            document.getElementById('tg-post').classList.add('hide');
+            document.getElementById('tg-post').classList.remove('flex');
+            document.getElementById('tg-feed-header').classList.remove('hide');
+            document.getElementById('tg-feed').classList.remove('hide');
+        }
+    </script>
+</body>
+</html>
